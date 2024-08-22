@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Book reviews</title>
+    </head>
+    <body>
+        <header>
+            <h1>Book reviews</h1>
+            <form action="/add" method="post">
+                <button type="submit">Add review</button>
+            </form>
+            <form action="/order" method="post" >
+                <label for="selectOrder">Order by:</label>
+                <select id="selectOrder" name="option" onchange="this.from.submit()">
+                    <option value="" disabled selected></option>
+                    <option value="Recency">Most recent</option>
+                    <option value="Rating">Rating</option>
+                </select>
+            </form>
+        </header>
+        <main>
+
