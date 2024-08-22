@@ -1,5 +1,9 @@
 <%- include('partials/header.ejs'); -%>
 
-
-
+<%= books %>
+<script>
+    document.getElementById("selectOrder").addEventListener("change", function () {
+      this.form.submit();
+    });
+  </script>
 <%- include("partials/footer.ejs"); -%>
