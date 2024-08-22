@@ -70,13 +70,13 @@ app.post("/new", async (req, res) => {
       if (result) {
         const bookTitle = result.title;
         const bookAuthor = result.authors[0].name;
-        try{
-          const bookCover = result.cover.medium;
-        } catch (error) {
-          const bookCover = null; 
-        }
+        let bookCover = null;
         const bookRelease = result.publish_date;
-        console.log(bookCover);
+        
+        if (result.cover.medium) {
+          bookCover = result.cover.medium;
+        }
+
         await db.query("INSERT INTO book_list (isbn,title,author,cover,review,publication_date,rating) VALUES ($1, $2, $3, $4, $5, $6, $7)",
           [isbn, bookTitle, bookAuthor, bookCover, review, bookRelease, rating]
         );

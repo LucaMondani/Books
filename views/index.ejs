@@ -1,6 +1,25 @@
 <%- include('partials/header.ejs'); -%>
+<div>
+<% books.forEach((book) => { %>
+  <div>
+    <% if(book.cover === null) {%>
+      <div>No cover available.</div>
+    <% } else {%>
+    <img src="<%= book.cover %>" alt="<%= book.title %> Cover"/>
+    <% } %>
+    <div>
+      <h2><%= book.title %></h2>
+      <p>by <%= book.author %></p>
+      <p>ISBN: <%= book.isbn %> - Release Date: <%= book.publication_date %> - Rating: <%= book.rating %>/10 </p>
+      <p><%= book.review %></p>
+    </div>
+    <hr>
+  </div>
+<% }) %>
 
-<%= books %>
+
+
+</div>
 <script>
     document.getElementById("selectOrder").addEventListener("change", function () {
       this.form.submit();
