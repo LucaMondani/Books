@@ -29,7 +29,13 @@ async function getBooks() {
 
 app.get("/", async (req, res) => {
   const books = await getBooks();
-  res.render("index.ejs", {books: books});
+  let success;
+  if (req.query.success) {
+    success = req.query.success;
+  } else {
+    success = null;
+  }
+  res.render("index.ejs", {books: books, success: success});
 });
 
 app.post("/order", async (req, res) => {
@@ -70,11 +76,10 @@ app.post("/new", async (req, res) => {
       if (result) {
         const bookTitle = result.title;
         const bookAuthor = result.authors[0].name;
-        let bookCover = null;
         const bookRelease = result.publish_date;
-        
-        if (result.cover.medium) {
-          bookCover = result.cover.medium;
+        let bookCover = null;
+        if (result.cover) {
+          let bookCover = result.cover.medium;
         }
 
         await db.query("INSERT INTO book_list (isbn,title,author,cover,review,publication_date,rating) VALUES ($1, $2, $3, $4, $5, $6, $7)",
@@ -89,6 +94,51 @@ app.post("/new", async (req, res) => {
   } catch (error) {
     console.log(error)
     res.render("new.ejs", {error: "An error occured, while processing your request."});
+  }
+});
+
+app.post("/edit", async (req, res) => {
+  let bookId = parseInt(req.body.book_id);
+  let books = await getBooks();
+  let chosenBook = books.find((book) => book.id === bookId);
+  let error;
+  if (req.body.error) {
+    error = req.body.error;
+  } else { error = null; }
+  res.render("new.ejs", {book: chosenBook, error: error});
+});
+
+app.post("/edited", async (req,res) => {
+  let bookId = parseInt(req.body.book_id);
+  try {
+    await db.query("UPDATE book_list SET review = $1, rating = $2 WHERE id = $3", [req.body.review, req.body.rating, bookId]);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    res.send(`
+      <html>
+          <body>
+              <form id="redirectForm" method="post" action="/edit">
+                  <input type="hidden" name="book_id" value='${bookId}' />
+                  <input type="hidden" name="error" value='${"An Error occured while editing, please try again."}' />
+              </form>
+              <script>
+                  document.getElementById('redirectForm').submit();
+              </script>
+          </body>
+      </html>
+  `);
+  }
+});
+
+app.post("/delete", async (req, res) => {
+  let bookId = req.body.book_id;
+  try {
+    await db.query("DELETE FROM book_list WHERE id = $1;", [bookId]);
+    res.redirect("/?success=true");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/?success=false")
   }
 });
 

@@ -1,4 +1,14 @@
 <%- include('partials/header.ejs'); -%>
+
+<% if (success == "true") { %>
+  <script>
+    alert('Erfolgreich gelöscht!');
+  </script>
+<% } else if (success == "false") {%>
+  <script>
+    alert('Löschen fehlgeschlagen!');
+  </script>
+<% } %>
 <div>
 <% books.forEach((book) => { %>
   <div>
@@ -13,6 +23,16 @@
       <p>ISBN: <%= book.isbn %> - Release Date: <%= book.publication_date %> - Rating: <%= book.rating %>/10 </p>
       <p><%= book.review %></p>
     </div>
+    <div>
+      <form action="/edit" method="post">
+        <input type="hidden" name="book_id" value="<%= book.id %>">
+        <button type="submit">Edit</button>
+      </form>
+      <form action="/delete" method="post">
+        <input type="hidden" name="book_id" value="<%= book.id %>">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
     <hr>
   </div>
 <% }) %>
@@ -24,5 +44,5 @@
     document.getElementById("selectOrder").addEventListener("change", function () {
       this.form.submit();
     });
-  </script>
+</script>
 <%- include("partials/footer.ejs"); -%>
