@@ -42,7 +42,7 @@ app.post("/order", async (req, res) => {
   let option = req.body.option;
   let query;
   if (option === "Recency") {
-    query = "SELECT * FROM book_list ORDER BY publication_date DESC";
+    query = "SELECT * FROM book_list ORDER BY publication_date ASC";
   } else if (option === "Rating") {
     query = "SELECT * FROM book_list ORDER BY rating DESC";
   }
@@ -79,7 +79,7 @@ app.post("/new", async (req, res) => {
         const bookRelease = result.publish_date;
         let bookCover = null;
         if (result.cover) {
-          let bookCover = result.cover.medium;
+          bookCover = result.cover.small;
         }
 
         await db.query("INSERT INTO book_list (isbn,title,author,cover,review,publication_date,rating) VALUES ($1, $2, $3, $4, $5, $6, $7)",

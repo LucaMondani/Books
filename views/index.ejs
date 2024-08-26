@@ -1,45 +1,45 @@
 <%- include('partials/header.ejs'); -%>
-
-<% if (success == "true") { %>
-  <script>
-    alert('Erfolgreich gelöscht!');
-  </script>
-<% } else if (success == "false") {%>
-  <script>
-    alert('Löschen fehlgeschlagen!');
-  </script>
+<% if (locals.success) {%>
+  <% if (success == "true") { %>
+    <script>
+      alert('Erfolgreich gelöscht!');
+    </script>
+  <% } else if (success == "false") {%>
+    <script>
+      alert('Löschen fehlgeschlagen!');
+    </script>
+  <% } %>
 <% } %>
-<div>
-<% books.forEach((book) => { %>
-  <div>
-    <% if(book.cover === null) {%>
-      <div>No cover available.</div>
-    <% } else {%>
-    <img src="<%= book.cover %>" alt="<%= book.title %> Cover"/>
-    <% } %>
-    <div>
-      <h2><%= book.title %></h2>
-      <p>by <%= book.author %></p>
-      <p>ISBN: <%= book.isbn %> - Release Date: <%= book.publication_date %> - Rating: <%= book.rating %>/10 </p>
-      <p><%= book.review %></p>
+
+<div id="books">
+  <% books.forEach((book) => { %>
+    <div id="book">
+      <% if(book.cover === null) {%>
+        <div id="replaceImg"><p id="replacePar" class="rubik-font">No cover available.</p></div>
+      <% } else {%>
+        <img id="image" src="<%= book.cover %>" alt="<%= book.title %> Cover"/>
+      <% } %>
+      <div>
+        <h2 class="forum-regular"><%= book.title %></h2>
+        <p class="rubik-font">by <%= book.author %></p>
+        <p class="rubik-font">ISBN: <%= book.isbn %> - Release Date: <%= book.publication_date %> - Rating: <%= book.rating %>/10 </p>
+        <p class="rubik-font"><%= book.review %></p>
+      </div>
+      <div id="buttonForm">
+        <form action="/edit" method="post">
+          <input type="hidden" name="book_id" value="<%= book.id %>">
+          <button type="submit" class="btn btn-secondary rubik-font">Edit</button>
+        </form>
+        <form action="/delete" method="post">
+          <input type="hidden" name="book_id" value="<%= book.id %>">
+          <button type="submit" class="btn btn-secondary rubik-font">Delete</button>
+        </form>
+      </div>
+      <hr>
     </div>
-    <div>
-      <form action="/edit" method="post">
-        <input type="hidden" name="book_id" value="<%= book.id %>">
-        <button type="submit">Edit</button>
-      </form>
-      <form action="/delete" method="post">
-        <input type="hidden" name="book_id" value="<%= book.id %>">
-        <button type="submit">Delete</button>
-      </form>
-    </div>
-    <hr>
-  </div>
-<% }) %>
-
-
-
+  <% }) %>
 </div>
+
 <script>
     document.getElementById("selectOrder").addEventListener("change", function () {
       this.form.submit();

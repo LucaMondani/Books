@@ -3,28 +3,48 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Forum&family=Rubik&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles/main.css"> 
+        <title>Book reviews</title>
     </head>
     <body>
         <main>
             <% if (!locals.book) {%>
-                <form action="/new" method="post"> 
-                    <input name="isbn" type="text">
-                    <textarea name="review" rows="5" cols="35"></textarea>
-                    <input name="rating" min="1" max="10" type="number">
-                    <button type="submit">Submit</button>
-                </form>
+                <h1 class="heading forum-regular">Add new Book review</h1>
+                <div class="newFormDiv">
+                    <form action="/new" method="post" class="newForm">
+                        <label for="isbn" id="label1" class="rubik-font">ISBN: </label> 
+                        <input id="isbn" name="isbn" type="text" autocomplete="off" required class="rubik-font">
+                        <label for="review" id="label2" class="rubik-font">Your review:</label>
+                        <textarea id="review" name="review" rows="5" cols="35" class="rubik-font" required></textarea>
+                        <div id="label3">
+                            <label for="rating" class="rubik-font">Your Rating:</label>
+                            <input id="rating" class="rubik-font" name="rating" min="1" max="10" type="number" required> <b>/</b>10
+                        </div>
+                        <button type="submit" class="btn btn-secondary rubik-font">Submit</button>
+                    </form>
+                </div>
                 <% if(locals.error) { %>
                     <%= error %>
                 <% } %>
             <% } else if (locals.book) {%>
-                <form action="/edited" method="post">
-                    <input type="hidden" name="book_id" value="<%= book.id %>"> 
-                    <input name="isbn" type="text" value="<%= book.isbn %>" disabled>
-                    <textarea name="review" rows="5" cols="35"><%= book.review %></textarea>
-                    <input name="rating" min="1" max="10" type="number" value="<%= book.rating %>">
-                    <button type="submit">Submit</button>
-                </form>
+                <h1 class="heading forum-regular">Edit Book review</h1>
+                <div class="newFormDiv rubik-font">
+                    <form action="/edited" method="post" class="newForm">
+                        <input type="hidden"  name="book_id" value="<%= book.id %>">
+                        <label for="isbn1" id="label11" class="rubik-font">ISBN: </label> 
+                        <input class="rubik-font" name="isbn" id="isbn1" type="text" value="<%= book.isbn %>" disabled>
+                        <label for="review1" id="label21" class="rubik-font">Your review:</label>
+                        <textarea name="review" id="review1" rows="5" cols="35" class="rubik-font"><%= book.review %></textarea>
+                        <div id="label31">
+                            <label for="rating1" class="rubik-font">Your Rating:</label>
+                            <input id="rating1" name="rating" min="1" max="10" type="number" value="<%= book.rating %>" class="rubik-font"> <b>/</b>10
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                    </form>
+                </div>
                 <% if(locals.error) { %>
                     <%= error %>
                 <% } %>
